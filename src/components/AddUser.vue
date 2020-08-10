@@ -12,8 +12,8 @@
           id="grid-first-name"
           type="text"
           placeholder="Enter First Name"
-          v-model="firstName"
-        >
+          v-model="user.firstName"
+        />
       </div>
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
@@ -26,8 +26,8 @@
           id="grid-last-name"
           type="text"
           placeholder="Enter Last Name"
-          v-model="firstName"
-        >
+          v-model="user.lastName"
+        />
       </div>
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
@@ -39,8 +39,8 @@
           class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           id="grid-date"
           type="date"
-          v-model="birthDate"
-        >
+          v-model="user.birthDate"
+        />
       </div>
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
@@ -52,62 +52,78 @@
           class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           id="grid-quote"
           type="text"
-          placeholder="Enter Quote"
-          v-model="quote"
-        >
+          placeholder="Enter Quot"
+          v-model="user.quote"
+        />
       </div>
-      <drop-down
-        :options="professions"
-        :changeSelect="selectProfession"
-      />
-      <drop-down />
+
+      <DropDown :options="professions" :changeSelect="selectProfession" />
+
+      <DropDown :options="countries" :changeSelect="selectCountry" />
     </div>
     <button-component
-      :on-click="addUser"
+      :on-click="handleAddUserSubmit"
       :button-text="'Save User'"
     />
   </form>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex';
-import DropDown from './DropDown';
-import ButtonComponent from './Button';
+import { mapState, mapActions, mapMutations } from "vuex";
+import DropDown from "./DropDown";
+import ButtonComponent from "./Button";
 
 export default {
-  name: 'AddUser',
+  name: "AddUser",
   data() {
     return {
       user: {
-        firstName: '',
-        lastName: '',
+        firstName: "",
+        lastName: "",
         birthDate: null,
-        quote: '',
-      },
+        quote: "",
+        profession_id: 0,
+        country_id: 0
+      }
     };
   },
   components: {
     DropDown,
-    ButtonComponent,
+    ButtonComponent
   },
   computed: {
     ...mapState({
-      professions: state => state.professionModule.professions,
-    }),
+      professions: state => state.professionModule.professions
+    })
   },
   methods: {
     ...mapMutations({
-      setProfession: 'SET_PROFESSION',
+      setProfession: "SET_PROFESSION"
     }),
-    ...mapActions([
-      'addNewUsers',
-    ]),
-    addUser() {
-      this.addNewUser(this.user);
+    ...mapActions(["addNewUser"]),
+    handleAddUserSubmit() {
+
+      // Dispatch form data to user action
+      this.$store.dispatch("addNewUser", this.user);
+
+      // Reset form data
+      this.user = {
+        firstName: "",
+        lastName: "",
+        birthDate: null,
+        quote: "",
+        profession_id: 0,
+        country_id: 0
+      };
+    },
+    selectProfession(value) {
+      this.user.profession_id = value;
+    },
+    selectCountry(value) {
+      console.log(value);
     }
-  },
-}
+  }
+};
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
