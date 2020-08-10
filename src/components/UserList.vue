@@ -17,12 +17,18 @@
         />
         <td class="border px-4 py-2" v-text="user.birthDate" />
         <td class="border px-4 py-2" v-text="userAge(user)" />
-        <td class="border px-4 py-2" v-text="getProfessionById(user.profession_id).text" />
-        <td class="border px-4 py-2" v-text="getCountryById(user.country_id).text" />
+        <td
+          class="border px-4 py-2"
+          v-text="getProfessionById(user.profession_id).text"
+        />
+        <td
+          class="border px-4 py-2"
+          v-text="getCountryById(user.country_id).text"
+        />
         <td class="border px-4 py-2" v-text="user.quote" />
         <td class="px-4 py-2">
           <button-component
-            class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
+            class="btn-red"
             :on-click="() => removeRow(user)"
             :button-text="'Remove'"
           />
@@ -52,10 +58,7 @@ export default {
       users: state => state.userModule.users,
       professions: state => state.professionModule.professions
     }),
-    ...mapGetters([
-      'getProfessionById',
-      'getCountryById'
-    ])
+    ...mapGetters(["getProfessionById", "getCountryById"])
   },
   methods: {
     ...mapActions(["removeUser"]),
@@ -74,3 +77,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.btn-red {
+  background-color: crimson;
+}
+</style>

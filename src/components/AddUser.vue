@@ -1,14 +1,14 @@
 <template>
-  <form class="md:w-8/12 mx-auto my-10">
+  <form id="add-user-form" class="md:w-8/12 mx-auto my-10">
     <div class="flex flex-wrap -mx-3 mb-6">
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          class="add-user-form-label"
           for="grid-first-name"
           v-text="'First Name'"
         />
         <input
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          class="add-user-form-input"
           id="grid-first-name"
           type="text"
           placeholder="Enter First Name"
@@ -17,12 +17,12 @@
       </div>
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          class="add-user-form-label"
           for="grid-last-name"
           v-text="'Last Name'"
         />
         <input
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          class="add-user-form-input"
           id="grid-last-name"
           type="text"
           placeholder="Enter Last Name"
@@ -31,12 +31,12 @@
       </div>
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          class="add-user-form-label"
           for="grid-date"
           v-text="'Date of Birth'"
         />
         <input
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          class="add-user-form-input"
           id="grid-date"
           type="date"
           v-model="user.birthDate"
@@ -44,12 +44,12 @@
       </div>
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
-          class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+          class="add-user-form-label"
           for="grid-quote"
           v-text="'Favorite Quote'"
         />
         <input
-          class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+          class="add-user-form-input"
           id="grid-quote"
           type="text"
           placeholder="Enter Quote"
@@ -70,6 +70,7 @@
       />
     </div>
     <button-component
+      class="btn-blue"
       :on-click="handleAddUserSubmit"
       :button-text="'Save User'"
     />
@@ -106,15 +107,18 @@ export default {
     })
   },
   methods: {
+    /** Vuex Spreaders */
     ...mapMutations({
       setProfession: "SET_PROFESSION"
     }),
     ...mapActions(["addNewUser"]),
+
+    /** Functions */
     handleAddUserSubmit() {
-      // Dispatch form data to user action
+      /** Dispatch form data to user action */
       this.$store.dispatch("addNewUser", this.user);
 
-      // Reset form data
+      /** Reset form data */
       this.user = {
         firstName: "",
         lastName: "",
@@ -125,11 +129,9 @@ export default {
       };
     },
     selectProfession(value) {
-      console.log("returned value was: " + value);
       this.user.profession_id = parseInt(value);
     },
     selectCountry(value) {
-      console.log("returned value was: " + value);
       this.user.country_id = parseInt(value);
     }
   }
