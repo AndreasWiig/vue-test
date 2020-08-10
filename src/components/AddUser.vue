@@ -52,14 +52,22 @@
           class="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
           id="grid-quote"
           type="text"
-          placeholder="Enter Quot"
+          placeholder="Enter Quote"
           v-model="user.quote"
         />
       </div>
 
-      <DropDown :options="professions" :changeSelect="selectProfession" />
+      <DropDown
+        :options="professions"
+        :changeSelect="selectProfession"
+        :label="`Select Profession`"
+      />
 
-      <DropDown :options="countries" :changeSelect="selectCountry" />
+      <DropDown
+        :options="countries"
+        :changeSelect="selectCountry"
+        :label="`Select Country`"
+      />
     </div>
     <button-component
       :on-click="handleAddUserSubmit"
@@ -93,7 +101,8 @@ export default {
   },
   computed: {
     ...mapState({
-      professions: state => state.professionModule.professions
+      professions: state => state.professionModule.professions,
+      countries: state => state.countryModule.countries
     })
   },
   methods: {
@@ -102,7 +111,6 @@ export default {
     }),
     ...mapActions(["addNewUser"]),
     handleAddUserSubmit() {
-
       // Dispatch form data to user action
       this.$store.dispatch("addNewUser", this.user);
 
@@ -117,10 +125,12 @@ export default {
       };
     },
     selectProfession(value) {
-      this.user.profession_id = value;
+      console.log("returned value was: " + value);
+      this.user.profession_id = parseInt(value);
     },
     selectCountry(value) {
-      console.log(value);
+      console.log("returned value was: " + value);
+      this.user.country_id = parseInt(value);
     }
   }
 };

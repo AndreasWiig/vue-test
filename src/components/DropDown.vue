@@ -11,8 +11,8 @@
         @change="changeSelect($event.target.value)"
       >
         <option
-          v-for="option in options"
-          v-bind:value="option.value"
+          v-for="(option, index) in options"
+          v-bind:value="index"
           v-bind:key="option.key"
         >
           {{ option.text }}

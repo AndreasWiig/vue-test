@@ -17,8 +17,8 @@
         />
         <td class="border px-4 py-2" v-text="user.birthDate" />
         <td class="border px-4 py-2" v-text="userAge(user)" />
-        <td class="border px-4 py-2" v-text="user.profession_id" />
-        <td class="border px-4 py-2" v-text="user.country_id" />
+        <td class="border px-4 py-2" v-text="getProfessionById(user.profession_id).text" />
+        <td class="border px-4 py-2" v-text="getCountryById(user.country_id).text" />
         <td class="border px-4 py-2" v-text="user.quote" />
         <td class="px-4 py-2">
           <button-component
@@ -34,7 +34,7 @@
 
 <script>
 // import User from './User';
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import ButtonComponent from "./Button.vue";
 
 export default {
@@ -51,7 +51,11 @@ export default {
     ...mapState({
       users: state => state.userModule.users,
       professions: state => state.professionModule.professions
-    })
+    }),
+    ...mapGetters([
+      'getProfessionById',
+      'getCountryById'
+    ])
   },
   methods: {
     ...mapActions(["removeUser"]),
@@ -64,6 +68,9 @@ export default {
       const age = new Date(ageInMilliSeconds).getUTCFullYear() - 1970;
       return age;
     }
+  },
+  mounted() {
+    console.log(this.users);
   }
 };
 </script>
