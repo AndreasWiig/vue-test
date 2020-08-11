@@ -110,8 +110,8 @@ export default {
         lastName: null,
         birthDate: null,
         quote: null,
-        profession_id: 1,
-        country_id: 1
+        profession_id: 0,
+        country_id: 0
       },
       errorMsg: null,
       isFirstNameInvalid: false,
@@ -129,65 +129,75 @@ export default {
     })
   },
   methods: {
-    /** Vuex Spreaders */
-    ...mapActions(["addNewUser"]),
-    /** Functions */
+    /** Vuex Spreaders. */
+    ...mapActions(["addthis.user"]),
+    /** Functions. */
     handleAddUserSubmit() {
-      const newUser = this.user;
-
-      /** Reset validation and error message values */
+      /** Reset validation and error message values. */
       this.errorMsg = null;
       this.isFirstNameInvalid = false;
       this.isLastNameInvalid = false;
       this.isBirthDateInvalid = false;
 
-      /** 
+      /**
        * Simple error handlng. Will return at the first matched instance and give a very
        * basic error message.
        */
-      if (!newUser.firstName || !newUser.firstName.match(/^[A-Za-z]+$/)) {
+      if (!this.user.firstName || !this.user.firstName.match(/^[A-Za-z]+$/)) {
         this.isFirstNameInvalid = true;
-        this.errorMsg = "Invalid first name.";
+        this.errorMsg = "Invalid first name, only letters A-Z allowed.";
         return;
       }
 
-      if (!newUser.lastName || !newUser.lastName.match(/^[A-Za-z]+$/)) {
+      if (!this.user.lastName || !this.user.lastName.match(/^[A-Za-z]+$/)) {
         this.isLastNameInvalid = true;
-        this.errorMsg = "Invalid last name.";
+        this.errorMsg = "Invalid last name, only letters A-Z allowed.";
         return;
       }
 
-      /** Validate that age is between 18 and 100 */
+      /** Validate that age is between 18 and 100. */
       let now = new Date();
       let currentYear = now.getFullYear();
-      let birthDate = new Date(newUser.birthDate).getFullYear();
+      let birthDate = new Date(this.user.birthDate).getFullYear();
 
       if (
-        !newUser.birthDate ||
-        !(currentYear - birthDate > 18 || currentYear - newUser.birthDate < 100)
+        !this.user.birthDate ||
+        !(
+          currentYear - birthDate > 18 ||
+          currentYear - this.user.birthDate < 100
+        )
       ) {
         this.isBirthDateInvalid = true;
-        this.errorMsg = "Invalid birth date.";
+        this.errorMsg = "Birth date must be above 18 and below 100 years old.";
         return;
       }
-      /** Dispatch form data to user action */
-      this.$store.dispatch("addNewUser", this.user);
 
-      /** Reset form data */
-      this.user = {
-        firstName: "",
-        lastName: "",
-        birthDate: null,
-        quote: "",
-        profession_id: 0,
-        country_id: 0
-      };
+      if (
+        !this.isFirstNameInvalid &&
+        !this.isLastNameInvalid &&
+        !this.isBirthDateInvalid
+      ) {
+        /** Dispatch form data to user action if all fields are valid. */
+        this.$store.dispatch("addNewUser", this.user);
+
+        /** Reset form data. */
+        this.user = {
+          firstName: "",
+          lastName: "",
+          birthDate: null,
+          quote: "",
+          profession_id: 0,
+          country_id: 0
+        };
+      }
     },
     selectProfession(value) {
-      this.user.profession_id = parseInt(value);
+      this.user.profession_id = parseInt(value) + 1;
     },
     selectCountry(value) {
-      this.user.country_id = parseInt(value);
+      console.log("country changed");
+      this.user.country_id = parseInt(value) + 1;
+      console.log(this.user.country_id);
     }
   }
 };

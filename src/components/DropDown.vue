@@ -9,8 +9,8 @@
       >
         <option
           v-for="(option, index) in options"
-          v-bind:value="index"
-          v-bind:key="option.key"
+          :value="index"
+          :key="option.key"
         >
           {{ option.text }}
         </option>
