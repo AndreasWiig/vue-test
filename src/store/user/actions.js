@@ -1,6 +1,5 @@
 const actions = {
   addNewUser: ({ commit }, user) => {
-    console.log(user);
     commit("APPEND_USER", user);
   },
   removeUser: ({ commit }, user) => {

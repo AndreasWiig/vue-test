@@ -27,11 +27,10 @@
         />
         <td class="border px-4 py-2" v-text="user.quote" />
         <td class="px-4 py-2">
-          <button-component
+          <button
             class="btn-red"
-            :on-click="() => removeRow(user)"
-            :button-text="'Remove'"
-          />
+            @click="removeRow(user)"
+          >Remove</button>
         </td>
       </tr>
     </tbody>
@@ -39,20 +38,10 @@
 </template>
 
 <script>
-// import User from './User';
 import { mapState, mapActions, mapGetters } from "vuex";
-import ButtonComponent from "./Button.vue";
 
 export default {
   name: "UserList",
-  components: {
-    ButtonComponent
-  },
-  data() {
-    return {
-      selected: []
-    };
-  },
   computed: {
     ...mapState({
       users: state => state.userModule.users,
@@ -71,15 +60,7 @@ export default {
       const age = new Date(ageInMilliSeconds).getUTCFullYear() - 1970;
       return age;
     }
-  },
-  mounted() {
-    console.log(this.users);
   }
 };
 </script>
 
-<style scoped>
-.btn-red {
-  background-color: crimson;
-}
-</style>

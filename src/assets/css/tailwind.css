@@ -22,5 +22,8 @@
 .btn-red:hover {
   @apply bg-red-800;
 }
+.form-error-paragraph {
+  @apply w-full px-3 pb-2 mb-6  text-red-600 font-semibold
+}
 
 @tailwind utilities;

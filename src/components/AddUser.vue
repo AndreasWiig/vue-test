@@ -1,6 +1,27 @@
 <template>
   <form id="add-user-form" class="md:w-8/12 mx-auto my-10">
     <div class="flex flex-wrap -mx-3 mb-6">
+      <div class="w-full h-5 px-3 mb-6">
+        <span
+          class="form-error-paragraph md:w-1/3 md:mb-0"
+          v-if="this.isFirstNameInvalid"
+        >
+          {{ this.errorMsg }}
+        </span>
+        <span
+          class="form-error-paragraph md:w-1/3 md:mb-0"
+          v-if="this.isLastNameInvalid"
+        >
+          {{ this.errorMsg }}
+        </span>
+        <span
+          class="form-error-paragraph md:w-1/3 md:mb-0"
+          v-if="this.isBirthDateInvalid"
+        >
+          {{ this.errorMsg }}
+        </span>
+      </div>
+
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
           class="add-user-form-label"
@@ -42,6 +63,7 @@
           v-model="user.birthDate"
         />
       </div>
+
       <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
         <label
           class="add-user-form-label"
@@ -69,36 +91,36 @@
         :label="`Select Country`"
       />
     </div>
-    <button-component
-      class="btn-blue"
-      :on-click="handleAddUserSubmit"
-      :button-text="'Save User'"
-    />
+    <button class="btn-blue" @click.prevent="handleAddUserSubmit">
+      Save User
+    </button>
   </form>
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from "vuex";
+import { mapState, mapActions } from "vuex";
 import DropDown from "./DropDown";
-import ButtonComponent from "./Button";
 
 export default {
   name: "AddUser",
   data() {
     return {
       user: {
-        firstName: "",
-        lastName: "",
+        firstName: null,
+        lastName: null,
         birthDate: null,
-        quote: "",
-        profession_id: 0,
-        country_id: 0
-      }
+        quote: null,
+        profession_id: 1,
+        country_id: 1
+      },
+      errorMsg: null,
+      isFirstNameInvalid: false,
+      isLastNameInvalid: false,
+      isBirthDateInvalid: false
     };
   },
   components: {
-    DropDown,
-    ButtonComponent
+    DropDown
   },
   computed: {
     ...mapState({
@@ -108,13 +130,46 @@ export default {
   },
   methods: {
     /** Vuex Spreaders */
-    ...mapMutations({
-      setProfession: "SET_PROFESSION"
-    }),
     ...mapActions(["addNewUser"]),
-
     /** Functions */
     handleAddUserSubmit() {
+      const newUser = this.user;
+
+      /** Reset validation and error message values */
+      this.errorMsg = null;
+      this.isFirstNameInvalid = false;
+      this.isLastNameInvalid = false;
+      this.isBirthDateInvalid = false;
+
+      /** 
+       * Simple error handlng. Will return at the first matched instance and give a very
+       * basic error message.
+       */
+      if (!newUser.firstName || !newUser.firstName.match(/^[A-Za-z]+$/)) {
+        this.isFirstNameInvalid = true;
+        this.errorMsg = "Invalid first name.";
+        return;
+      }
+
+      if (!newUser.lastName || !newUser.lastName.match(/^[A-Za-z]+$/)) {
+        this.isLastNameInvalid = true;
+        this.errorMsg = "Invalid last name.";
+        return;
+      }
+
+      /** Validate that age is between 18 and 100 */
+      let now = new Date();
+      let currentYear = now.getFullYear();
+      let birthDate = new Date(newUser.birthDate).getFullYear();
+
+      if (
+        !newUser.birthDate ||
+        !(currentYear - birthDate > 18 || currentYear - newUser.birthDate < 100)
+      ) {
+        this.isBirthDateInvalid = true;
+        this.errorMsg = "Invalid birth date.";
+        return;
+      }
       /** Dispatch form data to user action */
       this.$store.dispatch("addNewUser", this.user);
 
