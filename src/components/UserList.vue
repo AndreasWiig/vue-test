@@ -101,13 +101,16 @@ export default {
     removeRow(user) {
       this.removeUser(user);
     },
-    userAge(user) {
-      const birthDate = user.birthDate;
-      const todaysDate = Date.now();
-      const birthDateInMilliseconds = (new Date(birthDate)).getTime();
-      const ageInMilliSeconds;
-      const age = (new Date()).getUTCFullYear() - 1970;
-      return age;
+    // userAge(user) {
+    //   const birthDate = user.birthDate;
+    //   const todaysDate = Date.now();
+    //   const birthDateInMilliseconds = (new Date(birthDate)).getTime();
+    //   const ageInMilliSeconds = todaysDate - birthDate;
+    //   const age = (new Date()).getUTCFullYear() - 1970;
+    //   return age;
+    // },
+    userAge() {
+      console.log("hello");
     },
   },
 }
