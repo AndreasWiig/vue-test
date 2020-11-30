@@ -59,12 +59,12 @@
         </div>
         <drop-down
           :options="professions"
-          :changeSelect="selectProfession"
+          :changeSelect="setProfession"
         />
         <drop-down />
       </div>
       <button-component
-        :on-click="addUser"
+        :on-click="(user) => addUser(user)"
         :button-text="'Save User'"
       />
     </form>
@@ -84,7 +84,7 @@ export default {
         firstName: '',
         lastName: '',
         birthDate: null,
-        quote: '',
+        quote: '', 
       },
     };
   },
@@ -94,23 +94,23 @@ export default {
   },
   computed: {
     ...mapState({
-      professions: state => state.professionModule.professions,
+        users: state => state.userModule.users,
+        professions: state => state.professionModule.professions,
+        countries: state => state.countriesModule.countries,
     }),
   },
   methods: {
     ...mapMutations({
       setProfession: 'SET_PROFESSION',
+      setCountry: 'SET_COUNTRY',
     }),
     ...mapActions([
-      'addNewUsers',
+      'addNewUser',
     ]),
     addUser() {
       this.addNewUser(this.user);
     },
-    selectProfession() {
-        console.log("hello");
-    }
-  },
+  }
 }
 </script>
 

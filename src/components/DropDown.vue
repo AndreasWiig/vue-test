@@ -43,7 +43,9 @@ export default {
     },
     changeSelect: {
       type: Function,
-      defualt: () => {},
+      defualt: (e) => {
+        e.preventDefault();
+      },
     },
   },
 }

@@ -64,7 +64,7 @@
         >
           <button-component
             class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-            :on-click="() => removeRow(user)"
+            :on-click="(user) => removeRow(user)"
             :button-text="'Remove'"
           />
         </td>
@@ -74,8 +74,7 @@
 </template>
 
 <script>
-// import User from './User';
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import ButtonComponent from './Button.vue';
 
 export default {
@@ -92,25 +91,27 @@ export default {
     ...mapState({
         users: state => state.userModule.users,
         professions: state => state.professionModule.professions,
+        countries: state => state.countriesModule.countries,
     }),
   },
   methods: {
+    ...mapMutations({
+      setProfession: 'SET_PROFESSION',
+      setCountry: 'SET_COUNTRY',
+    }),
     ...mapActions([
       'removeUser',
     ]),
-    removeRow(user) {
-      this.removeUser(user);
+    removeRow() {
+      this.removeUser(this.user);
     },
-    // userAge(user) {
-    //   const birthDate = user.birthDate;
-    //   const todaysDate = Date.now();
-    //   const birthDateInMilliseconds = (new Date(birthDate)).getTime();
-    //   const ageInMilliSeconds = todaysDate - birthDate;
-    //   const age = (new Date()).getUTCFullYear() - 1970;
-    //   return age;
-    // },
-    userAge() {
-      console.log("hello");
+    userAge(user) {
+      const birthDate = user.birthDate;
+      const todaysDate = Date.now();
+      const birthDateInMilliseconds = (new Date(birthDate)).getTime();
+      const ageInMilliSeconds = todaysDate - birthDateInMilliseconds;
+      const age = (new Date(ageInMilliSeconds)).getUTCFullYear() - 1970;
+      return age;
     },
   },
 }
