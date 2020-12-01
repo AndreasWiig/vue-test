@@ -49,11 +49,11 @@
         />
         <td
           class="border px-4 py-2"
-          v-text="user.profession_id"
+          v-text="getProfession(user.profession_id)"
         />
         <td
           class="border px-4 py-2"
-          v-text="user.country_id"
+          v-text="getCountry(user.country_id)"
         />
         <td
           class="border px-4 py-2"
@@ -62,11 +62,12 @@
         <td
           class="px-4 py-2"
         >
-          <button-component
+          <button
             class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center"
-            :on-click="(user) => removeRow(user)"
-            :button-text="'Remove'"
-          />
+            @click="removeRow(user)"
+          >
+            Remove
+          </button>
         </td>
       </tr>
     </tbody>
@@ -74,13 +75,11 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
-import ButtonComponent from './Button.vue';
+import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: 'UserList',
   components: {
-    ButtonComponent,
   },
   data() {
     return {
@@ -89,21 +88,15 @@ export default {
   },
   computed: {
     ...mapState({
-        users: state => state.userModule.users,
-        professions: state => state.professionModule.professions,
-        countries: state => state.countriesModule.countries,
+      users: state => state.userModule.users,
+      professions: state => state.professionModule.professions
     }),
+    ...mapGetters(["getProfession", "getCountry"])
   },
   methods: {
-    ...mapMutations({
-      setProfession: 'SET_PROFESSION',
-      setCountry: 'SET_COUNTRY',
-    }),
-    ...mapActions([
-      'removeUser',
-    ]),
-    removeRow() {
-      this.removeUser(this.user);
+    ...mapActions(["removeUser"]),
+    removeRow(user) {
+      this.$store.dispatch("removeUser", user);
     },
     userAge(user) {
       const birthDate = user.birthDate;

@@ -1,6 +1,6 @@
 const mutations = {
   SET_PROFESSION: (state, professionId) => {
-    state.users = professionId
+    console.log(state, professionId, "interesting stuff?");
   },
 };
 
