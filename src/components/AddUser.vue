@@ -103,15 +103,23 @@ export default {
   methods: {
     ...mapActions(["addNewUser"]),
     addUser() {
-      this.$store.dispatch("addNewUser", this.user);
-      this.user = {
-        firstName: '',
-        lastName: '',
-        birthDate: null,
-        quote: '', 
-        profession_id: 1,
-        country_id: 1
-      };
+      if ((this.user.firstName.length === 0) || (this.user.lastName.length === 0)) {
+        alert("Whooooooooooooooooooooo are you? WHO? WHO?... WHO? WHO?...");
+      } else if (!this.user.birthDate || (new Date(this.user.birthDate).getTime() > new Date().getTime())) {
+        alert("What's wrong with your birthday, brah?");
+      } else if (this.user.quote.length === 0) {
+        alert("Forgetting something?");
+      } else {
+        this.$store.dispatch("addNewUser", this.user);
+        this.user = {
+          firstName: '',
+          lastName: '',
+          birthDate: null,
+          quote: '', 
+          profession_id: 1,
+          country_id: 1
+        };
+      }  
     },
     setProfession(id) {
       this.user.profession_id = parseInt(id) + 1;
